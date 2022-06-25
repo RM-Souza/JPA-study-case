@@ -5,9 +5,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -22,5 +23,13 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCategory;
     private String name;
+
+    public Category(Long idCategory, String name) {
+        this.idCategory = idCategory;
+        this.name = name;
+    }
+
+    @Transient
+    private Set<Product> products =  new HashSet<>();
 
 }
