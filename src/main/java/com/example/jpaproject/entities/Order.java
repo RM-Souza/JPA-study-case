@@ -8,11 +8,12 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 @Entity
 @Table(name = "tb_order")
 public class Order implements Serializable {
@@ -25,12 +26,14 @@ public class Order implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant moment;
-
     private String orderStatus;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
+
+    @OneToMany(mappedBy = "id.order", fetch = FetchType.EAGER)
+    private Set<OrderItem> items = new HashSet<>();
 
     public Order(Long idOrder, Instant moment, OrderStatus orderStatus, User client) {
         this.idOrder = idOrder;
