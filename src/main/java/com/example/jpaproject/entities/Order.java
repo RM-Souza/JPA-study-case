@@ -1,5 +1,6 @@
 package com.example.jpaproject.entities;
 
+import com.example.jpaproject.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
@@ -9,7 +10,6 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -26,7 +26,26 @@ public class Order implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant moment;
 
+    private String orderStatus;
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
+
+    public Order(Long idOrder, Instant moment, OrderStatus orderStatus, User client) {
+        this.idOrder = idOrder;
+        this.moment = moment;
+        setOrderStatus(orderStatus);
+        this.client = client;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return OrderStatus.getStatus(orderStatus);
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        if (orderStatus != null) {
+            this.orderStatus = orderStatus.getStatusName();
+        }
+    }
 }
