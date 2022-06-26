@@ -3,16 +3,14 @@ package com.example.jpaproject.entities;
 import com.example.jpaproject.entities.pk.OrderItemPK;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
-
 @NoArgsConstructor
 @Entity
 @Table(name = "tb_order_item")
@@ -43,6 +41,7 @@ public class OrderItem implements Serializable {
         id.setOrder(order);
     }
 
+    @JsonIgnore
     public Product getProduct(){
         return id.getProduct();
     }
@@ -68,15 +67,27 @@ public class OrderItem implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderItem orderItem = (OrderItem) o;
-        return Objects.equals(id, orderItem.id);
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        OrderItem other = (OrderItem) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
 }
